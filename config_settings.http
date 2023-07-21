@@ -80,3 +80,11 @@ curl -X POST -u <username:password> -H 'kbn-xsrf: true' -H 'Content-Type: applic
         "timeFieldName": "High Resolution Timestamp"
     }
 }'
+
+# Enable stack monitoring
+PUT _cluster/settings
+{
+  "persistent": {
+    "xpack.monitoring.collection.enabled": true
+  }
+}
