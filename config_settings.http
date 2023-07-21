@@ -1,45 +1,41 @@
 # lifecycle policy
 PUT _ilm/policy/rotate-palo-logs
 {
-  "rotate-palo-logs": {
-    "version": 4,
-    "modified_date": "2023-07-21T15:09:45.645Z",
-    "policy": {
-      "phases": {
-        "delete": {
-          "min_age": "14d",
-          "actions": {
-            "delete": {
-              "delete_searchable_snapshot": true
-            }
+  "policy": {
+    "phases": {
+      "delete": {
+        "min_age": "14d",
+        "actions": {
+          "delete": {
+            "delete_searchable_snapshot": true
           }
-        },
-        "cold": {
-          "min_age": "1d",
-          "actions": {
-            "set_priority": {
-              "priority": 0
-            }
+        }
+      },
+      "cold": {
+        "min_age": "1d",
+        "actions": {
+          "set_priority": {
+            "priority": 0
           }
-        },
-        "warm": {
-          "min_age": "1h",
-          "actions": {
-            "set_priority": {
-              "priority": 50
-            }
+        }
+      },
+      "warm": {
+        "min_age": "1h",
+        "actions": {
+          "set_priority": {
+            "priority": 50
           }
-        },
-        "hot": {
-          "min_age": "0ms",
-          "actions": {
-            "rollover": {
-              "max_age": "30d",
-              "max_primary_shard_size": "50gb"
-            },
-            "set_priority": {
-              "priority": 100
-            }
+        }
+      },
+      "hot": {
+        "min_age": "0ms",
+        "actions": {
+          "rollover": {
+            "max_age": "30d",
+            "max_primary_shard_size": "50gb"
+          },
+          "set_priority": {
+            "priority": 100
           }
         }
       }
@@ -50,33 +46,27 @@ PUT _ilm/policy/rotate-palo-logs
 # index template
 PUT _index_template/palo-logs
 {
-  "index_templates": [
-    {
-      "name": "palo-logs",
-      "index_template": {
-        "index_patterns": [
-          "fluentd_stream*"
-        ],
-        "template": {
-          "settings": {
-            "index": {
-              "lifecycle": {
-                "name": "rotate-palo-logs"
-              },
-              "number_of_shards": "1",
-              "number_of_replicas": "1"
-            }
-          }
+  "index_patterns": [
+    "fluentd_stream*"
+  ],
+  "template": {
+    "settings": {
+      "index": {
+        "lifecycle": {
+          "name": "rotate-palo-logs"
         },
-        "composed_of": [],
-        "data_stream": {
-          "hidden": false,
-          "allow_custom_routing": false
-        }
+        "number_of_shards": "1",
+        "number_of_replicas": "1"
       }
     }
-  ]
+  },
+  "composed_of": [],
+  "data_stream": {
+    "hidden": false,
+    "allow_custom_routing": false
+  }
 }
 
 # create data stream
+DELETE fluentd_stream
 PUT _data_stream/fluentd_stream
