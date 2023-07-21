@@ -70,3 +70,13 @@ PUT _index_template/palo-logs
 # create data stream
 DELETE fluentd_stream
 PUT _data_stream/fluentd_stream
+
+# Create Kibana data view
+curl -X POST -u <username:password> -H 'kbn-xsrf: true' -H 'Content-Type: application/json' http://<kibana-host>:5601/api/data_views/data_view -d '
+{
+    "data_view": {
+        "title": "fluentd_stream",
+        "name": "Palo Logs",
+        "timeFieldName": "High Resolution Timestamp"
+    }
+}'
