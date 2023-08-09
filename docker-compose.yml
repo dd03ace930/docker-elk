@@ -138,6 +138,7 @@ services:
       - 5601:5601
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      KIBANA_ENCRYPTOIN_KEY: ${KIBANA_ENCRYPTOIN_KEY:-}
       KB_JAVA_OPTS: -Xms1g -Xmx1g
     networks:
       - elk
