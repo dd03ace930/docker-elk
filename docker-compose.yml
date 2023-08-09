@@ -55,7 +55,7 @@ services:
     ports:
       - 9200:9200
     environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ES_JAVA_OPTS: -Xms1g -Xmx1g
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
       # Set a deterministic node name.
       node.name: elasticsearch01
@@ -75,7 +75,7 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch02:/usr/share/elasticsearch/data
     environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ES_JAVA_OPTS: -Xms1g -Xmx1g
       # Set a deterministic node name.
       node.name: elasticsearch02
       # Use other cluster nodes for unicast discovery.
@@ -94,7 +94,7 @@ services:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch03:/usr/share/elasticsearch/data
     environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
+      ES_JAVA_OPTS: -Xms1g -Xmx1g
       # Set a deterministic node name.
       node.name: elasticsearch03
       # Use other cluster nodes for unicast discovery.
@@ -138,6 +138,7 @@ services:
       - 5601:5601
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
+      KB_JAVA_OPTS: -Xms1g -Xmx1g
     networks:
       - elk
     depends_on:
