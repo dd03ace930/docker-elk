@@ -66,6 +66,7 @@ services:
       cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
     networks:
       - elk
+    restart: unless-stopped
 
   elasticsearch02:
     build:
@@ -85,6 +86,7 @@ services:
       cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
     networks:
       - elk
+    restart: unless-stopped
 
   elasticsearch03:
     build:
@@ -104,6 +106,7 @@ services:
       cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
     networks:
       - elk
+    restart: unless-stopped
 
 
   logstash:
