@@ -76,6 +76,8 @@ services:
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch02:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
     environment:
       ES_JAVA_OPTS: -Xms1g -Xmx1g
       # Set a deterministic node name.
@@ -96,6 +98,8 @@ services:
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch03:/usr/share/elasticsearch/data
+    ports:
+      - 9202:9200
     environment:
       ES_JAVA_OPTS: -Xms1g -Xmx1g
       # Set a deterministic node name.
