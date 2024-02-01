@@ -30,6 +30,7 @@ services:
       - ./setup/roles:/roles:ro
     environment:
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
+      ELASTICSEARCH_HOST: elasticsearch01
       LOGSTASH_INTERNAL_PASSWORD: ${LOGSTASH_INTERNAL_PASSWORD:-}
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
       METRICBEAT_INTERNAL_PASSWORD: ${METRICBEAT_INTERNAL_PASSWORD:-}
@@ -55,16 +56,19 @@ services:
     ports:
       - 9200:9200
     environment:
-      ES_JAVA_OPTS: -Xms1g -Xmx1g
+      ES_JAVA_OPTS: -Xms12g -Xmx12g
       ELASTIC_PASSWORD: ${ELASTIC_PASSWORD:-}
       # Set a deterministic node name.
       node.name: elasticsearch01
       # Use other cluster nodes for unicast discovery.
       discovery.seed_hosts: elasticsearch02,elasticsearch03
       # Define initial masters, assuming a cluster size of at least 3.
-      cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
+      # cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
     networks:
-      - elk
+      elk:
+        aliases:
+          - elasticsearch
+    restart: unless-stopped
 
   elasticsearch02:
     build:
@@ -74,16 +78,21 @@ services:
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch02:/usr/share/elasticsearch/data
+    ports:
+      - 9201:9200
     environment:
-      ES_JAVA_OPTS: -Xms1g -Xmx1g
+      ES_JAVA_OPTS: -Xms12g -Xmx12g
       # Set a deterministic node name.
       node.name: elasticsearch02
       # Use other cluster nodes for unicast discovery.
       discovery.seed_hosts: elasticsearch01,elasticsearch03
       # Define initial masters, assuming a cluster size of at least 3.
-      cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
+      # cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
     networks:
-      - elk
+      elk:
+        aliases:
+          - elasticsearch
+    restart: unless-stopped
 
   elasticsearch03:
     build:
@@ -93,16 +102,21 @@ services:
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
       - elasticsearch03:/usr/share/elasticsearch/data
+    ports:
+      - 9202:9200
     environment:
-      ES_JAVA_OPTS: -Xms1g -Xmx1g
+      ES_JAVA_OPTS: -Xms12g -Xmx12g
       # Set a deterministic node name.
       node.name: elasticsearch03
       # Use other cluster nodes for unicast discovery.
       discovery.seed_hosts: elasticsearch01,elasticsearch02
       # Define initial masters, assuming a cluster size of at least 3.
-      cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
+      # cluster.initial_master_nodes: elasticsearch01,elasticsearch02,elasticsearch03
     networks:
-      - elk
+      elk:
+        aliases:
+          - elasticsearch
+    restart: unless-stopped
 
 
   logstash:
@@ -138,7 +152,7 @@ services:
       - 5601:5601
     environment:
       KIBANA_SYSTEM_PASSWORD: ${KIBANA_SYSTEM_PASSWORD:-}
-      KIBANA_ENCRYPTOIN_KEY: ${KIBANA_ENCRYPTOIN_KEY:-}
+      KIBANA_ENCRYPTION_KEY: ${KIBANA_ENCRYPTION_KEY:-}
       KB_JAVA_OPTS: -Xms1g -Xmx1g
     networks:
       - elk
