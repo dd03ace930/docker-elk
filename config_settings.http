@@ -12,7 +12,7 @@ PUT _ilm/policy/rotate-palo-logs
         }
       },
       "cold": {
-        "min_age": "1d",
+        "min_age": "3d",
         "actions": {
           "set_priority": {
             "priority": 0
@@ -20,7 +20,7 @@ PUT _ilm/policy/rotate-palo-logs
         }
       },
       "warm": {
-        "min_age": "1h",
+        "min_age": "1d",
         "actions": {
           "set_priority": {
             "priority": 50
